@@ -58,7 +58,15 @@ const createPost = [
 
 // read post
 
-const readPost = () => {};
+const readPost = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const post = await Post.findById(req.params.id).populate("user");
+    res.json(post);
+  } catch (error) {
+    // Handle any errors that occur during the query
+    next(error);
+  }
+};
 
 // update post
 
