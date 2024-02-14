@@ -4,18 +4,18 @@ import PostController from "../controllers/postController";
 
 // create post
 
-router.post("/", PostController.createPost);
+router.post("/create", PostController.createPost);
 
 // read post
 
-router.get("/:id", PostController.readPost);
+router.get("/read/:id", PostController.readPost);
 
 // update post
 
-router.put("/:id", PostController.updatePost);
+router.put("/update/:id", PostController.updatePost);
 
 // delete post
 
-router.delete("/:id", PostController.deletePost);
+router.delete("/delete/:id", PostController.deletePost);
 
 export default router;
