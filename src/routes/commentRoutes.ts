@@ -4,14 +4,14 @@ import CommentController from "../controllers/commentController";
 
 // create comment
 
-router.post("/", CommentController.createComment);
+router.post("/create", CommentController.createComment);
 
 // read comment
 
-router.get("/:id", CommentController.readComment);
+router.get("/read/:id", CommentController.readComment);
 
 // delete comment
 
-router.delete("/:id", CommentController.deleteComment);
+router.delete("/delete/:id", CommentController.deleteComment);
 
 export default router;
