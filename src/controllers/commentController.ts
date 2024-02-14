@@ -77,7 +77,21 @@ const updateComment = [
 
 // delete comment
 
-const deleteComment = () => {};
+const deleteComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const comment = await Comment.findByIdAndDelete(req.params.id);
+    if (!comment) {
+      return res.status(404).json({ message: "Cannot find comment" });
+    }
+    res.json({ message: "comment deleted" });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const CommentController = {
   createComment,
