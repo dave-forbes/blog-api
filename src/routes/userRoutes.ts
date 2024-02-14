@@ -1,10 +1,11 @@
 import express from "express";
 const router = express.Router();
 import UserController from "../controllers/userController";
+import AuthController from "../controllers/authController";
 
-// create new user
+// register new user
 
-router.post("/", UserController.createUser);
+router.post("/", AuthController.registerUser);
 
 // read user
 
