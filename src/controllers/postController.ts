@@ -3,6 +3,18 @@ import { body, validationResult } from "express-validator";
 import Post from "../models/postModel";
 import User from "../models/userModel";
 
+// get all posts
+
+const getPosts = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const posts = await Post.find().populate("user");
+    res.json(posts);
+  } catch (error) {
+    // Handle any errors that occur during the query
+    next(error);
+  }
+};
+
 // create post
 
 const createPost = [
@@ -56,6 +68,12 @@ const updatePost = () => {};
 
 const deletePost = () => {};
 
-const PostController = { createPost, readPost, updatePost, deletePost };
+const PostController = {
+  getPosts,
+  createPost,
+  readPost,
+  updatePost,
+  deletePost,
+};
 
 export default PostController;
