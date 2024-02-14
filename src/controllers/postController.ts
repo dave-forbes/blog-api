@@ -10,7 +10,6 @@ const getPosts = async (req: Request, res: Response, next: NextFunction) => {
     const posts = await Post.find().populate("user");
     res.json(posts);
   } catch (error) {
-    // Handle any errors that occur during the query
     next(error);
   }
 };
@@ -66,7 +65,6 @@ const readPost = async (req: Request, res: Response, next: NextFunction) => {
     }
     res.json(post);
   } catch (error) {
-    // Handle any errors that occur during the query
     next(error);
   }
 };
@@ -92,14 +90,8 @@ const updatePost = [
     try {
       const errors = validationResult(req);
 
-      const post = await Post.findById(req.params.id);
-
-      if (!post) {
-        return res.status(404).json({ message: "Cannot find post" });
-      }
-
       if (!errors.isEmpty()) {
-        return res.status(400).json({ post, errors: errors.array() });
+        return res.status(400).json({ errors: errors.array() });
       }
       const updatedPost = await Post.findByIdAndUpdate(
         req.params.id,
@@ -107,11 +99,13 @@ const updatePost = [
           title: req.body.title,
           text: req.body.text,
         },
-        { new: true }
+        { new: true } // to return the updated document
       );
+      if (!updatedPost) {
+        return res.status(404).json({ message: "Cannot find post" });
+      }
       res.json(updatedPost);
     } catch (error) {
-      // Handle any errors that occur during the query
       next(error);
     }
   },
@@ -119,7 +113,17 @@ const updatePost = [
 
 // delete post
 
-const deletePost = () => {};
+const deletePost = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const post = await Post.findByIdAndDelete(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: "Cannot find post" });
+    }
+    res.json({ message: "Post deleted" });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const PostController = {
   getPosts,
