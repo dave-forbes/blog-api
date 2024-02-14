@@ -4,7 +4,7 @@ import UserController from "../controllers/userController";
 
 // register new user
 
-router.post("/", UserController.registerUser);
+router.post("/register", UserController.registerUser);
 
 // Login user
 
@@ -12,6 +12,6 @@ router.post("/", UserController.registerUser);
 
 // Details for specific user
 
-router.get("/", UserController.getUser);
+router.get("/:id", UserController.getUser);
 
 export default router;
