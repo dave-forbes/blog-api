@@ -8,6 +8,8 @@ router.post("/register", UserController.registerUser);
 
 // Login user
 
+router.post("/log-in", UserController.loginUser);
+
 // Logout user
 
 // Details for specific user
