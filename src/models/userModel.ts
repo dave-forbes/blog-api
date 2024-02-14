@@ -6,6 +6,7 @@ const UserSchema = new Schema(
   {
     username: { type: String, required: true, maxLength: 100, unique: true },
     password: { type: String, required: true, maxLength: 100 },
+    author: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
