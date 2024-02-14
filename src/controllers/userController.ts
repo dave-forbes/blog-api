@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import User from "../models/userModel";
+import generateAccessToken from "../utils/generateAccessToken";
 
 // Register a new user
 
@@ -46,9 +47,28 @@ const registerUser = [
   },
 ];
 
-// Login user
+// Log in user
 
-const loginUser = (req: Request, res: Response) => {};
+const loginUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword)
+      return res.status(403).json({ message: "Invalid credentials" });
+
+    const token = generateAccessToken({
+      username: user.username,
+      id: user._id,
+    });
+    res.json({ token, message: "Log in successfull" });
+  } catch (error) {
+    next(error);
+  }
+};
 
 // Logout user
 
