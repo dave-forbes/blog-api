@@ -75,6 +75,7 @@ const readPost = async (req: Request, res: Response, next: NextFunction) => {
 // update post
 
 const updatePost = [
+  authenticateToken,
   body("title")
     .trim()
     .isLength({ min: 1 })
@@ -116,17 +117,20 @@ const updatePost = [
 
 // delete post
 
-const deletePost = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const post = await Post.findByIdAndDelete(req.params.id);
-    if (!post) {
-      return res.status(404).json({ message: "Cannot find post" });
+const deletePost = [
+  authenticateToken,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const post = await Post.findByIdAndDelete(req.params.id);
+      if (!post) {
+        return res.status(404).json({ message: "Cannot find post" });
+      }
+      res.json({ message: "Post deleted" });
+    } catch (error) {
+      next(error);
     }
-    res.json({ message: "Post deleted" });
-  } catch (error) {
-    next(error);
-  }
-};
+  },
+];
 
 const PostController = {
   getPosts,
