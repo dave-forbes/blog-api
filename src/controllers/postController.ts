@@ -61,6 +61,9 @@ const createPost = [
 const readPost = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const post = await Post.findById(req.params.id).populate("user");
+    if (!post) {
+      return res.status(404).json({ message: "Cannot find post" });
+    }
     res.json(post);
   } catch (error) {
     // Handle any errors that occur during the query
@@ -70,7 +73,49 @@ const readPost = async (req: Request, res: Response, next: NextFunction) => {
 
 // update post
 
-const updatePost = () => {};
+const updatePost = [
+  body("title")
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage("Title is required")
+    .customSanitizer((value) => {
+      return value.replace(/[^a-zA-Z0-9\s\_\-']/g, "");
+    }),
+  body("text")
+    .trim()
+    .customSanitizer((value) => {
+      return value.replace(/[^a-zA-Z0-9\s\_\-']/g, "");
+    })
+    .isLength({ min: 1 })
+    .withMessage("Text is required"),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const errors = validationResult(req);
+
+      const post = await Post.findById(req.params.id);
+
+      if (!post) {
+        return res.status(404).json({ message: "Cannot find post" });
+      }
+
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ post, errors: errors.array() });
+      }
+      const updatedPost = await Post.findByIdAndUpdate(
+        req.params.id,
+        {
+          title: req.body.title,
+          text: req.body.text,
+        },
+        { new: true }
+      );
+      res.json(updatedPost);
+    } catch (error) {
+      // Handle any errors that occur during the query
+      next(error);
+    }
+  },
+];
 
 // delete post
 
