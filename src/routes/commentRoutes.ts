@@ -6,9 +6,13 @@ import CommentController from "../controllers/commentController";
 
 router.post("/create", CommentController.createComment);
 
-// read comment
+// // read comment
 
-router.get("/read/:id", CommentController.readComment);
+// router.get("/read/:id", CommentController.readComment);
+
+// update comment
+
+router.put("/update/:id", CommentController.updateComment);
 
 // delete comment
 
