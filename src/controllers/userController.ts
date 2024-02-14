@@ -1,4 +1,4 @@
-import express from "express";
+import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import User from "../models/userModel";
@@ -19,11 +19,8 @@ const registerUser = [
     }
     return true;
   }),
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
+
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       const errors = validationResult(req);
 
@@ -51,11 +48,11 @@ const registerUser = [
 
 // Login user
 
-const loginUser = (req: express.Request, res: express.Response) => {};
+const loginUser = (req: Request, res: Response) => {};
 
 // Logout user
 
-const logoutUser = (req: express.Request, res: express.Response) => {};
+const logoutUser = (req: Request, res: Response) => {};
 
 // Details for specific user
 
