@@ -17,6 +17,19 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+// Error Handling Middleware
+app.use(
+  (
+    err: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    console.error(err.stack);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+);
+
 app.listen(port, () => {
   return console.log(`Express is listening at http://localhost:${port}`);
 });
