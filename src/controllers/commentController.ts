@@ -3,10 +3,13 @@ import { body, validationResult } from "express-validator";
 import Comment from "../models/commentModel";
 import User from "../models/userModel";
 import Post from "../models/postModel";
+import authenticateToken from "../utils/authenticateToken";
 
 // create comment
 
 const createComment = [
+  authenticateToken,
+
   body("text")
     .trim()
     .customSanitizer((value) => {
@@ -42,6 +45,7 @@ const createComment = [
 ];
 
 const updateComment = [
+  authenticateToken,
   body("text")
     .trim()
     .customSanitizer((value) => {
@@ -77,21 +81,20 @@ const updateComment = [
 
 // delete comment
 
-const deleteComment = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const comment = await Comment.findByIdAndDelete(req.params.id);
-    if (!comment) {
-      return res.status(404).json({ message: "Cannot find comment" });
+const deleteComment = [
+  authenticateToken,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const comment = await Comment.findByIdAndDelete(req.params.id);
+      if (!comment) {
+        return res.status(404).json({ message: "Cannot find comment" });
+      }
+      res.json({ message: "comment deleted" });
+    } catch (error) {
+      next(error);
     }
-    res.json({ message: "comment deleted" });
-  } catch (error) {
-    next(error);
-  }
-};
+  },
+];
 
 const CommentController = {
   createComment,
