@@ -4,6 +4,8 @@ import PostController from "../controllers/postController";
 
 // get all posts
 
+router.get("/", PostController.getPosts);
+
 // create post
 
 router.post("/create", PostController.createPost);
