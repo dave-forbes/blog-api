@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 import Post from "../models/postModel";
+import User from "../models/userModel";
 
 // create post
 
@@ -24,10 +25,12 @@ const createPost = [
     try {
       const errors = validationResult(req);
 
+      const user = await User.findById(req.body.user);
+
       const newPost = new Post({
         title: req.body.title,
         text: req.body.text,
-        user: req.body.user,
+        user: user,
       });
 
       if (!errors.isEmpty()) {
