@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import userRouter from "./routes/userRoutes";
 import postRouter from "./routes/postRoutes";
 import commentRouter from "./routes/commentRoutes";
-import connect from "./database";
+import connect from "./utils/database";
 
 dotenv.config();
 
