@@ -2,6 +2,8 @@ import express from "express";
 const router = express.Router();
 import PostController from "../controllers/postController";
 
+// get all posts
+
 // create post
 
 router.post("/create", PostController.createPost);
