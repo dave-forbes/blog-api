@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 import Post from "../models/postModel";
 import User from "../models/userModel";
+import authenticateToken from "../utils/authenticateToken";
 
 // get all posts
 
@@ -17,6 +18,8 @@ const getPosts = async (req: Request, res: Response, next: NextFunction) => {
 // create post
 
 const createPost = [
+  authenticateToken,
+
   body("title")
     .trim()
     .isLength({ min: 1 })
