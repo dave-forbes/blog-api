@@ -41,14 +41,48 @@ const createComment = [
   },
 ];
 
-// read comment
+const updateComment = [
+  body("text")
+    .trim()
+    .customSanitizer((value) => {
+      return value.replace(/[^a-zA-Z0-9\s\_\-']/g, "");
+    })
+    .isLength({ min: 1 })
+    .withMessage("Text is required"),
 
-const readComment = () => {};
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const updatedComment = await Comment.findByIdAndUpdate(
+        req.params.id,
+        {
+          text: req.body.text,
+        },
+        { new: true }
+      );
+      if (!updatedComment) {
+        return res.status(404).json({ message: "Could not find comment" });
+      }
+      res.status(201).json({ updatedComment, message: "Comment updated." });
+    } catch (error) {
+      next(error);
+    }
+  },
+];
 
 // delete comment
 
 const deleteComment = () => {};
 
-const CommentController = { createComment, readComment, deleteComment };
+const CommentController = {
+  createComment,
+  updateComment,
+  deleteComment,
+};
 
 export default CommentController;
