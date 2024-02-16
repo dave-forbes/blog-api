@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import userRouter from "./routes/userRoutes";
 import postRouter from "./routes/postRoutes";
@@ -26,17 +26,10 @@ app.use("/posts", postRouter);
 app.use("/comments", commentRouter);
 
 // Error Handling Middleware
-app.use(
-  (
-    err: any,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    console.error(err.stack);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-);
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Internal Server Error" });
+});
 
 app.listen(port, () => {
   return console.log(`Express is listening at http://localhost:${port}`);
