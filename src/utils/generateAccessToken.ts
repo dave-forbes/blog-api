@@ -1,11 +1,14 @@
 import jwt from "jsonwebtoken";
+import { Types } from "mongoose";
 
-const generateAccessToken = (user: any) => {
-  // fix type later
+interface User {
+  username: string;
+  id: Types.ObjectId;
+}
+
+const generateAccessToken = (user: User): string | Error => {
   if (!process.env.JWT_SECRET) {
-    console.error("JWT_SECRET not found in environment variables");
-    const error = new Error("JWT_SECRET not found in environment variables");
-    return error;
+    throw new Error("JWT_SECRET not found in environment variables");
   }
   return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "120s" });
 };
