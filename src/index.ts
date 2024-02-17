@@ -4,6 +4,7 @@ import userRouter from "./routes/userRoutes";
 import postRouter from "./routes/postRoutes";
 import commentRouter from "./routes/commentRoutes";
 import connect from "./utils/database";
+import cors from "cors";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ connect();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 
 // routes
 
