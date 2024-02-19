@@ -5,6 +5,17 @@ import User from "../models/userModel";
 import Post from "../models/postModel";
 import authenticateToken from "../utils/authenticateToken";
 
+// get all comments for a specific post
+
+const getComments = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const comments = await Comment.find({ user: req.params.id });
+    res.json(comments);
+  } catch (error) {
+    next(error);
+  }
+};
+
 // create comment
 
 const createComment = [
@@ -100,6 +111,7 @@ const CommentController = {
   createComment,
   updateComment,
   deleteComment,
+  getComments,
 };
 
 export default CommentController;
