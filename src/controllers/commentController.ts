@@ -9,7 +9,9 @@ import authenticateToken from "../utils/authenticateToken";
 
 const getComments = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const comments = await Comment.find({ post: req.params.id });
+    const comments = await Comment.find({ post: req.params.id })
+      .populate("user")
+      .populate("post");
     res.json(comments);
   } catch (error) {
     next(error);
