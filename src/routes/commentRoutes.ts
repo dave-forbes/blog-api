@@ -6,9 +6,9 @@ import CommentController from "../controllers/commentController";
 
 router.post("/create", CommentController.createComment);
 
-// // read comment
+// get all comments for a specific post
 
-// router.get("/read/:id", CommentController.readComment);
+router.get("/:id", CommentController.getComments);
 
 // update comment
 
