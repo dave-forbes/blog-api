@@ -10,7 +10,7 @@ const generateAccessToken = (user: User): string | Error => {
   if (!process.env.JWT_SECRET) {
     throw new Error("JWT_SECRET not found in environment variables");
   }
-  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "120s" });
+  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "1h" });
 };
 
 export default generateAccessToken;
