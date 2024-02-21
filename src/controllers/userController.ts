@@ -63,6 +63,7 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     const token = generateAccessToken({
       username: user.username,
       id: user._id,
+      author: user.author,
     });
     res.json({ token, message: "Log in successfull" });
   } catch (error) {
