@@ -29,8 +29,11 @@ app.use("/comments", commentRouter);
 
 // Error Handling Middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  // Handle the error case
   console.error(err.stack);
-  res.status(500).json({ message: "Internal Server Error" });
+  return res
+    .status(500)
+    .json({ error: err ? err.stack : "Internal Server Error" });
 });
 
 app.listen(port, () => {
