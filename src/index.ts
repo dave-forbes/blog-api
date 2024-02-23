@@ -32,9 +32,7 @@ app.use("/comments", commentRouter);
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   // Handle the error case
   console.error(err.stack);
-  return res
-    .status(500)
-    .json({ error: err ? err.stack : "Internal Server Error" });
+  return res.status(500).json({ message: "Internal Server Error" });
 });
 
 app.listen(port, () => {
