@@ -26,6 +26,7 @@ const registerUser = [
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
+        console.log(errors.array());
         return res.status(400).json({ errors: errors.array() });
       }
 
@@ -54,11 +55,13 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
 
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) return res.status(404).json({ message: "Cannot find user" });
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword)
-      return res.status(403).json({ message: "Password incorrect" });
+      return res
+        .status(403)
+        .json({ message: `Incorrect password for user: ${user.username}` });
 
     const token = generateAccessToken({
       username: user.username,
