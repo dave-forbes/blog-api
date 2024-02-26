@@ -44,10 +44,13 @@ const createPost = [
 
       const user = await User.findById(req.body.user);
 
+      const imagePath = req.file ? `${__dirname}/img/${req.file.filename}` : "";
+
       const newPost = new Post({
         title: req.body.title,
         text: req.body.text,
         user: user,
+        img1: imagePath,
       });
 
       if (!errors.isEmpty()) {
