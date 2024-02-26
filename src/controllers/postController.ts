@@ -157,6 +157,35 @@ const publishPost = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const featurePost = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: "Cannot find post" });
+    }
+
+    // find the featured post and unfeature it
+    const featuredPost = await Post.findOneAndUpdate(
+      { featured: true },
+      { featured: false }
+    );
+    if (!featuredPost) {
+      return res
+        .status(500)
+        .json({ message: "Internal server error, please try again later" });
+    }
+
+    // make the requested post featured
+
+    await Post.findByIdAndUpdate(req.params.id, {
+      featured: true,
+    });
+    res.json({ message: "Post featured status updated" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const PostController = {
   getPosts,
   createPost,
@@ -164,6 +193,7 @@ const PostController = {
   updatePost,
   deletePost,
   publishPost,
+  featurePost,
 };
 
 export default PostController;

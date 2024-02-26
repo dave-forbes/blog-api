@@ -26,4 +26,8 @@ router.delete("/delete/:id", PostController.deletePost);
 
 router.put("/publish/:id", PostController.publishPost);
 
+// feature post
+
+router.put("/feature/:id", PostController.featurePost);
+
 export default router;
