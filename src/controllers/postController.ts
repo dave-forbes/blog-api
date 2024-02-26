@@ -3,6 +3,7 @@ import { body, validationResult } from "express-validator";
 import Post from "../models/postModel";
 import User from "../models/userModel";
 import authenticateToken from "../utils/authenticateToken";
+import upload from "../utils/multerSetup";
 
 // get all posts
 
@@ -19,6 +20,8 @@ const getPosts = async (req: Request, res: Response, next: NextFunction) => {
 
 const createPost = [
   authenticateToken,
+
+  upload.single("image"),
 
   body("title")
     .trim()
