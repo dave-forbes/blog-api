@@ -165,6 +165,16 @@ const deletePost = [
       if (!post) {
         return res.status(404).json({ message: "Cannot find post" });
       }
+
+      if (post.img1 && fs.existsSync(post.img1)) {
+        try {
+          fs.unlinkSync(post.img1); // Delete the original image
+          console.log("Original image deleted successfully");
+        } catch (error) {
+          console.error("Error deleting original image:", error);
+        }
+      }
+
       res.json({ message: "Post deleted" });
     } catch (error) {
       next(error);
