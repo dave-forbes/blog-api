@@ -4,6 +4,7 @@ import Post from "../models/postModel";
 import User from "../models/userModel";
 import authenticateToken from "../utils/authenticateToken";
 import upload from "../utils/multerSetup";
+import fs from "fs";
 
 // get all posts
 
@@ -44,9 +45,9 @@ const createPost = [
 
       const user = await User.findById(req.body.user);
 
-      const imagePath = req.file
-        ? `https://blog-api-production-7c83.up.railway.app/img/${req.file.filename}`
-        : "";
+      const baseUrl = `${req.protocol}://${req.get("host")}`;
+
+      const imagePath = req.file ? `${baseUrl}/img/${req.file.filename}` : "";
 
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -108,9 +109,32 @@ const updatePost = [
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const imagePath = req.file
-        ? `https://blog-api-production-7c83.up.railway.app/img/${req.file.filename}`
-        : "";
+      const post = await Post.findById(req.params.id);
+
+      if (!post) {
+        return res.status(404).json({ message: "Cannot find post" });
+      }
+
+      let imagePath = post.img1;
+      if (req.file) {
+        const newImagePath = `/img/${req.file.filename}`;
+
+        const baseUrl = `${req.protocol}://${req.get("host")}`;
+        const imageUrl = `${baseUrl}${newImagePath}`;
+
+        if (post.img1 && fs.existsSync(post.img1)) {
+          try {
+            fs.unlinkSync(post.img1); // Delete the original image
+            console.log("Original image deleted successfully");
+          } catch (error) {
+            console.error("Error deleting original image:", error);
+          }
+        } else if (post.img1) {
+          console.log("Original image not found");
+        }
+
+        imagePath = imageUrl; // Update imagePath with the new image URL
+      }
 
       const updatedPost = await Post.findByIdAndUpdate(
         req.params.id,
