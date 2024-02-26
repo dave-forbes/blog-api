@@ -46,6 +46,10 @@ const createPost = [
 
       const imagePath = req.file ? `${__dirname}/img/${req.file.filename}` : "";
 
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
       const newPost = new Post({
         title: req.body.title,
         text: req.body.text,
@@ -53,9 +57,6 @@ const createPost = [
         img1: imagePath,
       });
 
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ newPost, errors: errors.array() });
-      }
       await newPost.save();
       res.status(201).json({ newPost, message: "New post created" });
     } catch (error) {
