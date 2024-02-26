@@ -9,6 +9,7 @@ const PostSchema = new Schema(
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     published: { type: Boolean, default: false },
     featured: { type: Boolean, default: false },
+    img1: { type: String },
   },
   { timestamps: true }
 );
