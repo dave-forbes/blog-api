@@ -22,4 +22,8 @@ router.put("/update/:id", PostController.updatePost);
 
 router.delete("/delete/:id", PostController.deletePost);
 
+// publish post
+
+router.put("/publish/:id", PostController.publishPost);
+
 export default router;

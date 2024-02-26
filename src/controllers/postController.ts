@@ -141,12 +141,29 @@ const deletePost = [
   },
 ];
 
+const publishPost = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: "Cannot find post" });
+    }
+    const published = post.published;
+    await Post.findByIdAndUpdate(req.params.id, {
+      published: published ? false : true,
+    });
+    res.json({ message: "Post published status updated" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const PostController = {
   getPosts,
   createPost,
   readPost,
   updatePost,
   deletePost,
+  publishPost,
 };
 
 export default PostController;
