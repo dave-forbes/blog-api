@@ -85,6 +85,7 @@ const readPost = async (req: Request, res: Response, next: NextFunction) => {
 
 const updatePost = [
   authenticateToken,
+  upload.single("image"),
   body("title")
     .trim()
     .isLength({ min: 1 })
@@ -106,11 +107,17 @@ const updatePost = [
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
+
+      const imagePath = req.file
+        ? `https://blog-api-production-7c83.up.railway.app/img/${req.file.filename}`
+        : "";
+
       const updatedPost = await Post.findByIdAndUpdate(
         req.params.id,
         {
           title: req.body.title,
           text: req.body.text,
+          img1: imagePath,
         },
         { new: true } // to return the updated document
       );
