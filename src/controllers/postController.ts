@@ -166,6 +166,19 @@ const deletePost = [
         return res.status(404).json({ message: "Cannot find post" });
       }
 
+      // Check if the deleted post was featured, if so select another post to be featured
+      if (post.featured) {
+        const otherPosts = await Post.find({
+          _id: { $ne: post._id },
+          featured: false,
+        });
+        const randomIndex = Math.floor(Math.random() * otherPosts.length);
+        const randomPost = otherPosts[randomIndex];
+
+        randomPost.featured = true;
+        await randomPost.save();
+      }
+
       if (post.img1 && fs.existsSync(post.img1)) {
         try {
           fs.unlinkSync(post.img1); // Delete the original image
