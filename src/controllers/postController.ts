@@ -5,6 +5,7 @@ import User from "../models/userModel";
 import authenticateToken from "../utils/authenticateToken";
 import upload from "../utils/multerSetup";
 import fs from "fs";
+import path from "path";
 
 // get all posts
 
@@ -115,25 +116,32 @@ const updatePost = [
         return res.status(404).json({ message: "Cannot find post" });
       }
 
+      const baseUrl = `${req.protocol}://${req.get("host")}`;
       let imagePath = post.img1;
+
       if (req.file) {
-        const newImagePath = `/img/${req.file.filename}`;
+        if (imagePath) {
+          const relativeImagePath = imagePath.replace(`${baseUrl}/img/`, "");
+          const parentDir = path.resolve(__dirname, "../..");
+          const originalUrl = path.join(
+            parentDir,
+            "public/img/",
+            relativeImagePath
+          );
 
-        const baseUrl = `${req.protocol}://${req.get("host")}`;
-        const imageUrl = `${baseUrl}${newImagePath}`;
-
-        if (post.img1 && fs.existsSync(post.img1)) {
-          try {
-            fs.unlinkSync(post.img1); // Delete the original image
-            console.log("Original image deleted successfully");
-          } catch (error) {
-            console.error("Error deleting original image:", error);
+          if (fs.existsSync(originalUrl)) {
+            try {
+              fs.unlinkSync(originalUrl); // Delete the original image
+              console.log("Original image deleted successfully");
+            } catch (error) {
+              console.error("Error deleting original image:", error);
+            }
+          } else {
+            console.log("Doesn't exist", originalUrl);
           }
-        } else if (post.img1) {
-          console.log("Original image not found");
         }
 
-        imagePath = imageUrl; // Update imagePath with the new image URL
+        imagePath = `${baseUrl}/img/${req.file.filename}`;
       }
 
       const updatedPost = await Post.findByIdAndUpdate(
@@ -179,13 +187,26 @@ const deletePost = [
         await randomPost.save();
       }
 
-      if (post.img1 && fs.existsSync(post.img1)) {
+      const baseUrl = `${req.protocol}://${req.get("host")}`;
+      const relativeImagePath = post.img1
+        ? post.img1.replace(`${baseUrl}/img/`, "")
+        : "";
+      const parentDir = path.resolve(__dirname, "../..");
+      const originalUrl = path.join(
+        parentDir,
+        "public/img/",
+        relativeImagePath
+      );
+
+      if (fs.existsSync(originalUrl)) {
         try {
-          fs.unlinkSync(post.img1); // Delete the original image
+          fs.unlinkSync(originalUrl); // Delete the original image
           console.log("Original image deleted successfully");
         } catch (error) {
           console.error("Error deleting original image:", error);
         }
+      } else {
+        console.log("Doesn't exist", originalUrl);
       }
 
       res.json({ message: "Post deleted" });
