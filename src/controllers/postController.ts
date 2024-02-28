@@ -6,6 +6,8 @@ import authenticateToken from "../utils/authenticateToken";
 import upload from "../utils/multerSetup";
 import fs from "fs";
 import path from "path";
+import sanitize from "sanitize-html";
+import sanitizeConfig from "../utils/sanitizeConfig";
 
 // get all posts
 
@@ -35,7 +37,7 @@ const createPost = [
   body("text")
     .trim()
     .customSanitizer((value) => {
-      return value.replace(/[^a-zA-Z0-9\s\_\-']/g, "");
+      return sanitize(value, sanitizeConfig);
     })
     .isLength({ min: 1 })
     .withMessage("Text is required"),
@@ -98,7 +100,7 @@ const updatePost = [
   body("text")
     .trim()
     .customSanitizer((value) => {
-      return value.replace(/[^a-zA-Z0-9\s\_\-']/g, "");
+      return sanitize(value, sanitizeConfig);
     })
     .isLength({ min: 1 })
     .withMessage("Text is required"),
