@@ -61,9 +61,7 @@ const updateComment = [
   authenticateToken,
   body("text")
     .trim()
-    .customSanitizer((value) => {
-      return value.replace(/[^a-zA-Z0-9\s\_\-']/g, "");
-    })
+    .escape()
     .isLength({ min: 1 })
     .withMessage("Text is required"),
 
