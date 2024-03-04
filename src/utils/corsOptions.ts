@@ -1,17 +1,10 @@
-const allowedOrigins = [
-  "https://blog-client-climbtribe.netlify.app",
-  "http://localhost:5173",
-];
-
 const corsOptions = {
-  origin: function (origin: any, callback: any) {
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
+  origin: [
+    "https://blog-client-climbtribe.netlify.app",
+    "http://localhost:5173",
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 export default corsOptions;

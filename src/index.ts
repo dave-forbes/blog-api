@@ -29,6 +29,9 @@ app.use("/users", userRouter);
 app.use("/posts", postRouter);
 app.use("/comments", commentRouter);
 
+// Handle preflight requests
+app.options("*", cors(corsOptions));
+
 // Error Handling Middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   // Handle the error case
