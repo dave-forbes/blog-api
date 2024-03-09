@@ -11,7 +11,7 @@ const connectDB = async (isTesting: boolean = false) => {
     if (isTesting) {
       mongoServer = new MongoMemoryServer();
       await mongoServer.start(); // Start the server before getting the URI
-      const mongoUri = await mongoServer.getUri();
+      const mongoUri = mongoServer.getUri();
       await mongoose.connect(mongoUri);
       console.log("Connected to MongoDB for testing");
     } else {
