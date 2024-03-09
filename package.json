@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "node dist/src/server.js",
     "install-production": "npm install --omit=dev",
     "dev": "nodemon",
     "test": "jest --coverage"
