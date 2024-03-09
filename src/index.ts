@@ -1,5 +1,4 @@
 import express, { Request, Response, NextFunction } from "express";
-import dotenv from "dotenv";
 import userRouter from "./routes/userRoutes";
 import postRouter from "./routes/postRoutes";
 import commentRouter from "./routes/commentRoutes";
@@ -7,10 +6,7 @@ import connect from "./utils/database";
 import cors from "cors";
 import corsOptions from "./utils/corsOptions";
 
-dotenv.config();
-
 const app = express();
-const port = process.env.PORT || 3000;
 
 // database connection
 
@@ -39,6 +35,4 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   return res.status(500).json({ message: "Internal Server Error" });
 });
 
-app.listen(port, () => {
-  return console.log(`Express is listening at http://localhost:${port}`);
-});
+export default app;
