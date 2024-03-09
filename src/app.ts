@@ -2,15 +2,19 @@ import express, { Request, Response, NextFunction } from "express";
 import userRouter from "./routes/userRoutes";
 import postRouter from "./routes/postRoutes";
 import commentRouter from "./routes/commentRoutes";
-import connect from "./utils/database";
+import { connectDB } from "./utils/database";
 import cors from "cors";
 import corsOptions from "./utils/corsOptions";
 
 const app = express();
 
+// check if testing
+
+const isTesting = process.env.NODE_ENV === "test";
+
 // database connection
 
-connect();
+connectDB(isTesting);
 
 // middleware
 
